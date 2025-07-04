@@ -113,23 +113,13 @@ class Global {
 
   /// 初始化各项服务
   static Future<void> _initServices() async {
-    if (kDebugMode) {
-      print('🚀 开始初始化服务...');
-    }
     await SpUtil.getInstance();
-
     await _updateAvailableUrl();
-
-    if (kDebugMode) {
-      print('🔄 初始化 Dio...');
-    }
     HttpUtils.initDio();
     ToastUtils.init();
     Get.put<HomeApi>(HomeApi());
     Get.put(WidgetsObserver());
-    if (kDebugMode) {
-      print('✅ 服务初始化完成');
-    }
+
   }
 
   /// 系统UI初始化
