@@ -24,7 +24,7 @@
         android:name=".FlClashApplication"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="红薯云">
+        android:label="FlClash">
         <activity
             android:name="com.follow.clash.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

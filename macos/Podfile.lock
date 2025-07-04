@@ -11,7 +11,7 @@ PODS:
   - file_selector_macos (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - HotKey (0.2.0)
+  - HotKey (0.2.1)
   - hotkey_manager_macos (0.0.1):
     - FlutterMacOS
     - HotKey
@@ -105,7 +105,7 @@ SPEC CHECKSUMS:
   dynamic_color: 2eaa27267de1ca20d879fbd6e01259773fb1670f
   file_selector_macos: cc3858c981fe6889f364731200d6232dac1d812d
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  HotKey: e96d8a2ddbf4591131e2bb3f54e69554d90cdca6
+  HotKey: 400beb7caa29054ea8d864c96f5ba7e5b4852277
   hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160
   mobile_scanner: 07710d6b9b2c220ae899de2d7ecf5d77ffa56333
   package_info_plus: 12f1c5c2cfe8727ca46cbd0b26677728972d9a5b
