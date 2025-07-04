@@ -1,0 +1,3 @@
+/Users/ll/Desktop/FlClash-Enhanced/android/core/.cxx/Debug/o231u3g3/arm64-v8a/CMakeFiles/core.dir
+/Users/ll/Desktop/FlClash-Enhanced/android/core/.cxx/Debug/o231u3g3/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/ll/Desktop/FlClash-Enhanced/android/core/.cxx/Debug/o231u3g3/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/armeabi-v7a/CMakeFiles/core.dir
+/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/armeabi-v7a/CMakeFiles/rebuild_cache.dir

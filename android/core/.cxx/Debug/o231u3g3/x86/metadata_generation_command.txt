@@ -1,0 +1,18 @@
+                        -H/Users/ll/Desktop/FlClash-Enhanced/android/core/src/main/cpp
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_SYSTEM_VERSION=21
+-DANDROID_PLATFORM=android-21
+-DANDROID_ABI=x86
+-DCMAKE_ANDROID_ARCH_ABI=x86
+-DANDROID_NDK=/Users/ll/Library/Android/sdk/ndk/28.0.13004108
+-DCMAKE_ANDROID_NDK=/Users/ll/Library/Android/sdk/ndk/28.0.13004108
+-DCMAKE_TOOLCHAIN_FILE=/Users/ll/Library/Android/sdk/ndk/28.0.13004108/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/Users/ll/Library/Android/sdk/cmake/3.22.1/bin/ninja
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/ll/Desktop/FlClash-Enhanced/build/core/intermediates/cxx/Debug/o231u3g3/obj/x86
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/Users/ll/Desktop/FlClash-Enhanced/build/core/intermediates/cxx/Debug/o231u3g3/obj/x86
+-DCMAKE_BUILD_TYPE=Debug
+-B/Users/ll/Desktop/FlClash-Enhanced/android/core/.cxx/Debug/o231u3g3/x86
+-GNinja
+                        Build command args: []
+                        Version: 2

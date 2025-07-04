@@ -1,0 +1,4 @@
+# ninja log v5
+1	82	1751531763875635148	CMakeFiles/core.dir/core.cpp.o	271d99d51b1e9a4a
+0	106	1751531763899980254	CMakeFiles/core.dir/jni_helper.cpp.o	bfccf03a629a5e18
+107	220	1751531764012773821	/Users/ll/Desktop/FlClash-Enhanced_副本/build/core/intermediates/cxx/Debug/456g454t/obj/x86_64/libcore.so	3b29b873827e7ad6

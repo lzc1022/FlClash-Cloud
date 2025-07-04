@@ -1,0 +1,4 @@
+# ninja log v5
+0	31	1751595819406833738	CMakeFiles/core.dir/core.cpp.o	94de9d8aa93dd292
+0	45	1751595819420468539	CMakeFiles/core.dir/jni_helper.cpp.o	d374c088510a5982
+45	101	1751595819475373740	/Users/ll/Desktop/FlClash-Cloud/build/core/intermediates/cxx/RelWithDebInfo/v6r503jx/obj/armeabi-v7a/libcore.so	dec12b1308227121
