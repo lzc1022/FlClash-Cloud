@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
 env:
   IS_STABLE: ${{ !contains(github.ref, '-') }}
 
@@ -58,7 +59,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ (startsWith(matrix.os, 'windows-11-arm') || startsWith(matrix.os, 'ubuntu-24.04-arm')) && 'master' || 'stable' }}
+          flutter-version: '3.32.4'
           cache: true
 
       - name: Get Flutter Dependency
