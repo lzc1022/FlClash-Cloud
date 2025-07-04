@@ -1,8 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:crypto/crypto.dart';
-
-import 'package:fl_clash/common/common.dart';
 
 class LinkParser {
   static const String v2rayDefaultGroup = "v2ray";
@@ -14,11 +10,11 @@ class LinkParser {
     final lines = content.split('\n');
     final proxies = <Map<String, dynamic>>[];
     final existingNames = <String>{};
-    
+
     for (final line in lines) {
       final trimmedLine = line.trim();
       if (trimmedLine.isEmpty) continue;
-      
+
       try {
         final proxy = parseProxyLink(trimmedLine);
         if (proxy != null) {
@@ -27,17 +23,17 @@ class LinkParser {
           final uniqueName = generateUniqueName(originalName, existingNames);
           proxy['name'] = uniqueName;
           existingNames.add(uniqueName);
-          
+
           proxies.add(proxy);
         }
       } catch (e) {
         print('解析代理链接失败: $trimmedLine, 错误: $e');
       }
     }
-    
+
     return proxies;
   }
-  
+
   /// 解析单个代理链接
   static Map<String, dynamic>? parseProxyLink(String link) {
     if (link.startsWith('ss://')) {
@@ -53,16 +49,16 @@ class LinkParser {
     }
     return null;
   }
-  
+
   /// 解析Shadowsocks链接
   static Map<String, dynamic>? _parseShadowsocks(String link) {
     try {
       final uri = Uri.parse(link);
       final userInfo = uri.userInfo;
       final fragment = Uri.decodeComponent(uri.fragment);
-      
+
       String method, password;
-      
+
       if (userInfo.contains(':')) {
         // 格式: method:password@host:port
         final parts = userInfo.split(':');
@@ -76,7 +72,7 @@ class LinkParser {
         method = parts[0];
         password = parts[1];
       }
-      
+
       return {
         'name': fragment.isNotEmpty ? fragment : '${uri.host}:${uri.port}',
         'type': 'ss',
@@ -91,14 +87,14 @@ class LinkParser {
       return null;
     }
   }
-  
+
   /// 解析VLESS链接
   static Map<String, dynamic>? _parseVLESS(String link) {
     try {
       final uri = Uri.parse(link);
       final query = uri.queryParameters;
       final fragment = Uri.decodeComponent(uri.fragment);
-      
+
       final proxy = <String, dynamic>{
         'name': fragment.isNotEmpty ? fragment : '${uri.host}:${uri.port}',
         'type': 'vless',
@@ -107,7 +103,7 @@ class LinkParser {
         'uuid': uri.userInfo,
         'udp': true,
       };
-      
+
       // 处理TLS
       final security = query['security'];
       if (security == 'tls' || security == 'xtls') {
@@ -122,11 +118,11 @@ class LinkParser {
           proxy['client-fingerprint'] = query['fp'];
         }
       }
-      
+
       // 处理传输协议
       final type = query['type'] ?? 'tcp';
       proxy['network'] = type;
-      
+
       switch (type) {
         case 'ws':
           proxy['ws-opts'] = {
@@ -146,26 +142,26 @@ class LinkParser {
           };
           break;
       }
-      
+
       // 处理流控
       if (query['flow'] != null) {
         proxy['flow'] = query['flow'];
       }
-      
+
       return proxy;
     } catch (e) {
       print('解析VLESS链接失败: $e');
       return null;
     }
   }
-  
+
   /// 解析VMess链接
   static Map<String, dynamic>? _parseVMess(String link) {
     try {
       final base64Data = link.substring(8); // 移除 "vmess://"
       final jsonData = utf8.decode(base64.decode(base64Data));
       final data = json.decode(jsonData) as Map<String, dynamic>;
-      
+
       final proxy = <String, dynamic>{
         'name': data['ps'] ?? '${data['add']}:${data['port']}',
         'type': 'vmess',
@@ -176,7 +172,7 @@ class LinkParser {
         'cipher': data['scy'] ?? 'auto',
         'udp': true,
       };
-      
+
       // 处理TLS
       if (data['tls'] == 'tls') {
         proxy['tls'] = true;
@@ -184,23 +180,25 @@ class LinkParser {
           proxy['servername'] = data['sni'];
         }
       }
-      
+
       // 处理传输协议
       final net = data['net'] ?? 'tcp';
       proxy['network'] = net;
-      
+
       switch (net) {
         case 'ws':
           proxy['ws-opts'] = {
             'path': data['path'] ?? '/',
-            'headers': data['host'] != null && data['host'].isNotEmpty 
-                ? {'Host': data['host']} : {},
+            'headers': data['host'] != null && data['host'].isNotEmpty
+                ? {'Host': data['host']}
+                : {},
           };
           break;
         case 'h2':
           proxy['h2-opts'] = {
-            'host': data['host'] != null && data['host'].isNotEmpty 
-                ? [data['host']] : [],
+            'host': data['host'] != null && data['host'].isNotEmpty
+                ? [data['host']]
+                : [],
             'path': data['path'] ?? '/',
           };
           break;
@@ -210,31 +208,31 @@ class LinkParser {
           };
           break;
       }
-      
+
       return proxy;
     } catch (e) {
       print('解析VMess链接失败: $e');
       return null;
     }
   }
-  
+
   /// 解析ShadowsocksR链接
   static Map<String, dynamic>? _parseShadowsocksR(String link) {
     try {
       final base64Data = link.substring(6); // 移除 "ssr://"
       final decoded = utf8.decode(base64.decode(base64Data));
-      
+
       final parts = decoded.split('/?');
       if (parts.length != 2) return null;
-      
+
       final serverParts = parts[0].split(':');
       if (serverParts.length != 6) return null;
-      
+
       final queryString = parts[1];
       final query = Uri.splitQueryString(queryString);
-      
+
       return {
-        'name': query['remarks'] != null 
+        'name': query['remarks'] != null
             ? utf8.decode(base64.decode(query['remarks']!))
             : '${serverParts[0]}:${serverParts[1]}',
         'type': 'ssr',
@@ -246,7 +244,7 @@ class LinkParser {
         'password': utf8.decode(base64.decode(serverParts[5])),
         'udp': true,
         'protocol-param': query['protoparam'] ?? '',
-        'obfs-param': query['obfsparam'] != null 
+        'obfs-param': query['obfsparam'] != null
             ? utf8.decode(base64.decode(query['obfsparam']!))
             : '',
       };
@@ -255,14 +253,14 @@ class LinkParser {
       return null;
     }
   }
-  
+
   /// 解析Trojan链接
   static Map<String, dynamic>? _parseTrojan(String link) {
     try {
       final uri = Uri.parse(link);
       final query = uri.queryParameters;
       final fragment = Uri.decodeComponent(uri.fragment);
-      
+
       final proxy = <String, dynamic>{
         'name': fragment.isNotEmpty ? fragment : '${uri.host}:${uri.port}',
         'type': 'trojan',
@@ -272,20 +270,20 @@ class LinkParser {
         'udp': true,
         'skip-cert-verify': query['allowInsecure'] == '1',
       };
-      
+
       if (query['sni'] != null) {
         proxy['sni'] = query['sni'];
       }
-      
+
       if (query['alpn'] != null) {
         proxy['alpn'] = query['alpn']!.split(',');
       }
-      
+
       // 处理传输协议
       final type = query['type'];
       if (type != null) {
         proxy['network'] = type;
-        
+
         switch (type) {
           case 'ws':
             proxy['ws-opts'] = {
@@ -300,20 +298,21 @@ class LinkParser {
             break;
         }
       }
-      
+
       if (query['fp'] != null) {
         proxy['client-fingerprint'] = query['fp'];
       }
-      
+
       return proxy;
     } catch (e) {
       print('解析Trojan链接失败: $e');
       return null;
     }
   }
-  
+
   /// 生成Clash配置
-  static Map<String, dynamic> generateClashConfig(List<Map<String, dynamic>> proxies) {
+  static Map<String, dynamic> generateClashConfig(
+      List<Map<String, dynamic>> proxies) {
     final config = <String, dynamic>{
       'port': 7890,
       'socks-port': 7891,
@@ -326,7 +325,8 @@ class LinkParser {
         {
           'name': '节点选择',
           'type': 'select',
-          'proxies': ['自动选择', 'DIRECT'] + proxies.map((p) => p['name'] as String).toList(),
+          'proxies': ['自动选择', 'DIRECT'] +
+              proxies.map((p) => p['name'] as String).toList(),
         },
         {
           'name': '自动选择',
@@ -350,23 +350,23 @@ class LinkParser {
         'MATCH,节点选择',
       ],
     };
-    
+
     return config;
   }
-  
+
   /// 生成唯一名称
   static String generateUniqueName(String baseName, Set<String> existingNames) {
     if (!existingNames.contains(baseName)) {
       return baseName;
     }
-    
+
     int counter = 1;
     String uniqueName;
     do {
       uniqueName = '$baseName-$counter';
       counter++;
     } while (existingNames.contains(uniqueName));
-    
+
     return uniqueName;
   }
-} 
+}

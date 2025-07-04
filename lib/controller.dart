@@ -504,7 +504,6 @@ class AppController {
       _ref.read(appSettingProvider).autoLaunch,
     );
     autoUpdateProfiles();
-    autoCheckUpdate();
     if (!_ref.read(appSettingProvider).silentLaunch) {
       window?.show();
     } else {

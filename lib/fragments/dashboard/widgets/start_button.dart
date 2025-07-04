@@ -5,6 +5,9 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../common/services/index.dart';
+import '../../../models/suscription_model.dart';
+
 class StartButton extends StatefulWidget {
   const StartButton({super.key});
 
@@ -92,7 +95,42 @@ class _StartButtonState extends State<StartButton>
               child: FloatingActionButton(
                 heroTag: null,
                 onPressed: () {
-                  handleSwitchStart();
+                  SubscriptionModel? model =
+                      UserInfo.instance.subscriptionModel;
+                  if (model != null) {
+                    var d = model.d ?? 0;
+                    var u = model.u ?? 0;
+                    //当前流量
+                    var currentGB = d + u;
+                    //总流量
+                    var totalGB = model.transferEnable ?? 0;
+                    if (currentGB >= totalGB) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                            '温馨提示',
+                            style: TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                          content: Text(
+                            '当前流量已用完，请购买套餐',
+                            textAlign: TextAlign.center,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 关闭弹窗
+                              },
+                              child: Text('确认'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      handleSwitchStart();
+                    }
+                  }
                 },
                 child: Row(
                   children: [

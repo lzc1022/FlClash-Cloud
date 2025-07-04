@@ -96,7 +96,7 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
     );
   }
 
-  ///加载数据
+  ///加载订阅链接数据
   loadData() {
     HomeApi().requestSubscribeUrl(
         success: (data) {

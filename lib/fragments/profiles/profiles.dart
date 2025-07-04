@@ -100,6 +100,12 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
           fireImmediately: true,
         );
         final profilesSelectorState = ref.watch(profilesSelectorStateProvider);
+        var appList = profilesSelectorState.profiles;
+        appList = List.from(appList);
+        if (appList.length > 1) {
+          appList.removeRange(1, appList.length);
+        }
+
         if (profilesSelectorState.profiles.isEmpty) {
           return GestureDetector(
             onTap: () {
@@ -127,11 +133,11 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
               crossAxisSpacing: 16,
               crossAxisCount: profilesSelectorState.columns,
               children: [
-                for (int i = 0; i < profilesSelectorState.profiles.length; i++)
+                for (int i = 0; i < appList.length; i++)
                   GridItem(
                     child: ProfileItem(
-                      key: Key(profilesSelectorState.profiles[i].id),
-                      profile: profilesSelectorState.profiles[i],
+                      key: Key(appList[i].id),
+                      profile: appList[i],
                       groupValue: profilesSelectorState.currentProfileId,
                       onChanged: (profileId) {
                         ref.read(currentProfileIdProvider.notifier).value =

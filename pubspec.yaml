@@ -1,7 +1,7 @@
 name: fl_clash
 description: A multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free.
 publish_to: 'none'
-version: 1.0.0+202505013
+version: 1.0.0+1
 environment:
   sdk: '>=3.1.0 <4.0.0'
 
@@ -83,6 +83,14 @@ dev_dependencies:
   riverpod_generator: ^2.6.3
   custom_lint: ^0.7.0
   riverpod_lint: ^2.6.3
+  rename: ^3.1.0 #项目重命名
+  flutter_launcher_icons: "^0.14.2" # 生成图标
+#生成安卓启动图标 执行命令 flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true # 去除ios图标透明背景
+  image_path: "assets/launcher_icon.png" #图片路径
 
 flutter:
   uses-material-design: true

@@ -13,7 +13,7 @@ const appHelperService = "FlClashHelperService";
 const coreName = "clash.meta";
 const browserUa =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-const packageName = "com.follow.clash";
+const packageName = "com.guangda.cloud";
 final unixSocketPath = "/tmp/FlClashSocket_${Random().nextInt(10000)}.sock";
 const helperPort = 47890;
 const maxTextScale = 1.4;
@@ -23,7 +23,8 @@ final baseInfoEdgeInsets = EdgeInsets.symmetric(
   horizontal: 16.ap,
 );
 
-final defaultTextScaleFactor = WidgetsBinding.instance.platformDispatcher.textScaleFactor;
+final defaultTextScaleFactor =
+    WidgetsBinding.instance.platformDispatcher.textScaleFactor;
 const httpTimeoutDuration = Duration(milliseconds: 5000);
 const moreDuration = Duration(milliseconds: 100);
 const animateDuration = Duration(milliseconds: 100);

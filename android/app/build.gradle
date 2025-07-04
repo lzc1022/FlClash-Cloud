@@ -60,7 +60,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.follow.clash"
+        applicationId "com.guangda.cloud"
         minSdkVersion 21
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
