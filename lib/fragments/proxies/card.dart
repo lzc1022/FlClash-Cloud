@@ -177,8 +177,8 @@ class ProxyCard extends StatelessWidget {
                               proxy.type,
                               style: context.textTheme.bodySmall?.copyWith(
                                 overflow: TextOverflow.ellipsis,
-                                color:
-                                    context.textTheme.bodySmall?.color?.opacity80,
+                                color: context
+                                    .textTheme.bodySmall?.color?.opacity80,
                               ),
                             ),
                           ),

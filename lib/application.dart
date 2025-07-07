@@ -171,7 +171,7 @@ class ApplicationState extends ConsumerState<Application> {
                   );
                 },
                 scrollBehavior: BaseScrollBehavior(),
-                title: appName,
+                title: '红薯云',
                 locale: utils.getLocaleForString(locale),
                 supportedLocales: AppLocalizations.delegate.supportedLocales,
                 themeMode: themeProps.themeMode,

@@ -1,17 +1,14 @@
-import 'package:fl_clash/clash/clash.dart';
-import 'package:fl_clash/common/common.dart';
+import 'dart:async';
+
 import 'package:fl_clash/common/platform_adapter.dart';
 import 'package:fl_clash/common/platform_permissions.dart';
 import 'package:fl_clash/manager/auto_switch_manager.dart';
 import 'package:fl_clash/manager/clipboard_manager.dart';
-import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
-import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:async';
 import 'package:intl/intl.dart';
 
 /// 增强功能页面
@@ -19,10 +16,12 @@ class EnhancedFeaturesFragment extends ConsumerStatefulWidget {
   const EnhancedFeaturesFragment({super.key});
 
   @override
-  ConsumerState<EnhancedFeaturesFragment> createState() => _EnhancedFeaturesFragmentState();
+  ConsumerState<EnhancedFeaturesFragment> createState() =>
+      _EnhancedFeaturesFragmentState();
 }
 
-class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragment> {
+class _EnhancedFeaturesFragmentState
+    extends ConsumerState<EnhancedFeaturesFragment> {
   final _intervalController = TextEditingController();
   final _testUrlController = TextEditingController();
   Timer? _uiUpdateTimer;
@@ -35,14 +34,15 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
       final settings = ref.read(appSettingProvider);
       _intervalController.text = settings.autoSwitchInterval.toString();
       // 只有当用户设置了自定义测试URL时才显示，否则保持空白（使用默认）
-      if (settings.autoSwitchTestUrl.isNotEmpty && 
-          settings.autoSwitchTestUrl != 'https://www.gstatic.com/generate_204') {
+      if (settings.autoSwitchTestUrl.isNotEmpty &&
+          settings.autoSwitchTestUrl !=
+              'https://www.gstatic.com/generate_204') {
         _testUrlController.text = settings.autoSwitchTestUrl;
       } else {
         _testUrlController.text = '';
       }
     });
-    
+
     // 启动UI更新定时器
     _uiUpdateTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
       if (mounted) {
@@ -58,13 +58,14 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
     _uiUpdateTimer?.cancel();
     super.dispose();
   }
-  
+
   /// 保存测试URL设置
   void _saveTestUrl(String value) {
     final trimmedValue = value.trim();
     // 如果输入框为空，则使用默认URL
-    final urlToSave = trimmedValue.isEmpty ? 
-                    'https://www.gstatic.com/generate_204' : trimmedValue;
+    final urlToSave = trimmedValue.isEmpty
+        ? 'https://www.gstatic.com/generate_204'
+        : trimmedValue;
     ref.read(appSettingProvider.notifier).updateState(
           (state) => state.copyWith(autoSwitchTestUrl: urlToSave),
         );
@@ -107,7 +108,9 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
             Row(
               children: [
                 Icon(
-                  adapter.isDesktop ? Icons.desktop_windows : Icons.phone_android,
+                  adapter.isDesktop
+                      ? Icons.desktop_windows
+                      : Icons.phone_android,
                   color: Colors.blue,
                 ),
                 const SizedBox(width: 8),
@@ -187,31 +190,37 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
             const SizedBox(height: 16),
             Consumer(
               builder: (context, ref, child) {
-                final enabled = ref.watch(appSettingProvider.select((state) => state.enableClipboardMonitor));
-                final isSupported = PlatformAdapter.instance.isClipboardSupported;
-                
+                final enabled = ref.watch(appSettingProvider
+                    .select((state) => state.enableClipboardMonitor));
+                final isSupported =
+                    PlatformAdapter.instance.isClipboardSupported;
+
                 return Column(
                   children: [
                     SwitchListTile(
                       title: const Text('启用剪贴板监听'),
-                      subtitle: Text(
-                        enabled ? '已启用' : 
-                        !isSupported ? '当前平台不支持' : '已禁用'
-                      ),
+                      subtitle: Text(enabled
+                          ? '已启用'
+                          : !isSupported
+                              ? '当前平台不支持'
+                              : '已禁用'),
                       value: enabled && isSupported,
-                      onChanged: isSupported ? (value) {
-                        ref.read(appSettingProvider.notifier).updateState(
-                              (state) => state.copyWith(enableClipboardMonitor: value),
-                            );
-                        
-                        if (value) {
-                          ClipboardManager.instance.startListening();
-                        } else {
-                          ClipboardManager.instance.stopListening();
-                        }
-                      } : null,
+                      onChanged: isSupported
+                          ? (value) {
+                              ref.read(appSettingProvider.notifier).updateState(
+                                    (state) => state.copyWith(
+                                        enableClipboardMonitor: value),
+                                  );
+
+                              if (value) {
+                                ClipboardManager.instance.startListening();
+                              } else {
+                                ClipboardManager.instance.stopListening();
+                              }
+                            }
+                          : null,
                     ),
-                    
+
                     // 导入历史管理
                     if (isSupported) ...[
                       const Divider(),
@@ -274,29 +283,33 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
             const SizedBox(height: 16),
             Consumer(
               builder: (context, ref, child) {
-                final enabled = ref.watch(appSettingProvider.select((state) => state.enableAutoSwitch));
-                final supportsBackground = PlatformAdapter.instance.supportsBackgroundExecution;
-                
+                final enabled = ref.watch(appSettingProvider
+                    .select((state) => state.enableAutoSwitch));
+                final supportsBackground =
+                    PlatformAdapter.instance.supportsBackgroundExecution;
+
                 return SwitchListTile(
                   title: const Text('启用自动测速切换'),
-                  subtitle: Text(
-                    enabled ? '已启用' : 
-                    !supportsBackground ? '当前平台后台限制' : '已禁用'
-                  ),
+                  subtitle: Text(enabled
+                      ? '已启用'
+                      : !supportsBackground
+                          ? '当前平台后台限制'
+                          : '已禁用'),
                   value: enabled,
                   onChanged: (value) {
                     if (!supportsBackground && value) {
                       // 显示警告
                       globalState.showMessage(
                         title: "警告",
-                        message: const TextSpan(text: "当前平台对后台运行有限制，自动测速功能可能不稳定"),
+                        message:
+                            const TextSpan(text: "当前平台对后台运行有限制，自动测速功能可能不稳定"),
                       );
                     }
-                    
+
                     ref.read(appSettingProvider.notifier).updateState(
                           (state) => state.copyWith(enableAutoSwitch: value),
                         );
-                    
+
                     if (value) {
                       final settings = ref.read(appSettingProvider);
                       AutoSwitchManager.instance.enable(
@@ -327,7 +340,8 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
                   onSubmitted: (value) {
                     final interval = int.tryParse(value) ?? 300;
                     ref.read(appSettingProvider.notifier).updateState(
-                          (state) => state.copyWith(autoSwitchInterval: interval),
+                          (state) =>
+                              state.copyWith(autoSwitchInterval: interval),
                         );
                     AutoSwitchManager.instance.setTestInterval(interval);
                   },
@@ -348,35 +362,43 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
                       // 默认选项（不可编辑，不显示具体URL）
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: _testUrlController.text.trim().isEmpty ? 
-                                   Theme.of(context).primaryColor : 
-                                   Theme.of(context).dividerColor,
-                            width: _testUrlController.text.trim().isEmpty ? 2 : 1,
+                            color: _testUrlController.text.trim().isEmpty
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).dividerColor,
+                            width:
+                                _testUrlController.text.trim().isEmpty ? 2 : 1,
                           ),
                           borderRadius: BorderRadius.circular(4),
-                          color: _testUrlController.text.trim().isEmpty ? 
-                                 Theme.of(context).primaryColor.withOpacity(0.1) : 
-                                 Theme.of(context).cardColor,
+                          color: _testUrlController.text.trim().isEmpty
+                              ? Theme.of(context).primaryColor.withOpacity(0.1)
+                              : Theme.of(context).cardColor,
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.radio_button_checked, 
-                                 color: _testUrlController.text.trim().isEmpty ? 
-                                        Theme.of(context).primaryColor : 
-                                        Theme.of(context).unselectedWidgetColor,
-                                 size: 18),
+                            Icon(Icons.radio_button_checked,
+                                color: _testUrlController.text.trim().isEmpty
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).unselectedWidgetColor,
+                                size: 18),
                             const SizedBox(width: 8),
                             Text(
                               '默认选项',
                               style: TextStyle(
-                                color: _testUrlController.text.trim().isEmpty ? 
-                                       Theme.of(context).primaryColor : 
-                                       Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
-                                fontWeight: _testUrlController.text.trim().isEmpty ? 
-                                           FontWeight.w600 : FontWeight.normal,
+                                color: _testUrlController.text.trim().isEmpty
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.6),
+                                fontWeight:
+                                    _testUrlController.text.trim().isEmpty
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
                               ),
                             ),
                           ],
@@ -389,18 +411,22 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: _testUrlController.text.trim().isNotEmpty ? 
-                                     Theme.of(context).primaryColor : 
-                                     Theme.of(context).dividerColor,
-                              width: _testUrlController.text.trim().isNotEmpty ? 2 : 1,
+                              color: _testUrlController.text.trim().isNotEmpty
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).dividerColor,
+                              width: _testUrlController.text.trim().isNotEmpty
+                                  ? 2
+                                  : 1,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: _testUrlController.text.trim().isNotEmpty ? 
-                                     Theme.of(context).primaryColor : 
-                                     Theme.of(context).dividerColor,
-                              width: _testUrlController.text.trim().isNotEmpty ? 2 : 1,
+                              color: _testUrlController.text.trim().isNotEmpty
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).dividerColor,
+                              width: _testUrlController.text.trim().isNotEmpty
+                                  ? 2
+                                  : 1,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -409,20 +435,27 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
                               width: 2,
                             ),
                           ),
-                          fillColor: _testUrlController.text.trim().isNotEmpty ? 
-                                    Theme.of(context).primaryColor.withOpacity(0.05) : null,
+                          fillColor: _testUrlController.text.trim().isNotEmpty
+                              ? Theme.of(context).primaryColor.withOpacity(0.05)
+                              : null,
                           filled: _testUrlController.text.trim().isNotEmpty,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           hintText: '输入自定义测试URL（留空使用默认）',
                           hintStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withOpacity(0.5),
                           ),
                           prefixIcon: Icon(
-                            _testUrlController.text.trim().isNotEmpty ? 
-                                Icons.radio_button_checked : Icons.radio_button_unchecked, 
-                            color: _testUrlController.text.trim().isNotEmpty ? 
-                                   Theme.of(context).primaryColor : 
-                                   Theme.of(context).unselectedWidgetColor,
+                            _testUrlController.text.trim().isNotEmpty
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_unchecked,
+                            color: _testUrlController.text.trim().isNotEmpty
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).unselectedWidgetColor,
                             size: 18,
                           ),
                         ),
@@ -465,24 +498,22 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
             ListTile(
               leading: const Icon(Icons.speed),
               title: const Text('立即测速'),
-              subtitle: Text(
-                AutoSwitchManager.instance.isTesting 
-                  ? '正在测试中...' 
-                  : '测试所有节点延迟并切换到最快节点'
-              ),
-              trailing: AutoSwitchManager.instance.isTesting 
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : null,
+              subtitle: Text(AutoSwitchManager.instance.isTesting
+                  ? '正在测试中...'
+                  : '测试所有节点延迟并切换到最快节点'),
+              trailing: AutoSwitchManager.instance.isTesting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : null,
               enabled: !AutoSwitchManager.instance.isTesting,
-              onTap: AutoSwitchManager.instance.isTesting 
-                ? null 
-                : () {
-                    AutoSwitchManager.instance.testAllProxiesManually();
-                  },
+              onTap: AutoSwitchManager.instance.isTesting
+                  ? null
+                  : () {
+                      AutoSwitchManager.instance.testAllProxiesManually();
+                    },
             ),
             ListTile(
               leading: const Icon(Icons.paste),
@@ -519,8 +550,9 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
   void _checkPermissions() async {
     try {
       final result = await PlatformPermissions.instance.requestPermissions();
-      final descriptions = PlatformPermissions.instance.getPermissionDescriptions();
-      
+      final descriptions =
+          PlatformPermissions.instance.getPermissionDescriptions();
+
       if (mounted) {
         showDialog(
           context: context,
@@ -571,7 +603,6 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 12),
-              
               Text('📋 分隔符支持', style: TextStyle(fontWeight: FontWeight.w600)),
               SizedBox(height: 4),
               Text('• 标准换行符：\\n'),
@@ -579,7 +610,6 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
               Text('• Mac换行符：\\r'),
               Text('• 错误格式自动修正：/n → \\n'),
               SizedBox(height: 12),
-              
               Text('🔗 支持的协议', style: TextStyle(fontWeight: FontWeight.w600)),
               SizedBox(height: 4),
               Text('• VMess: vmess://...'),
@@ -588,7 +618,6 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
               Text('• ShadowsocksR: ssr://...'),
               Text('• Trojan: trojan://...'),
               SizedBox(height: 12),
-              
               Text('💡 使用方法', style: TextStyle(fontWeight: FontWeight.w600)),
               SizedBox(height: 4),
               Text('1. 复制多个代理链接到剪贴板'),
@@ -596,7 +625,6 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
               Text('3. 点击"从剪贴板导入"按钮'),
               Text('4. 系统会自动识别和解析所有链接'),
               SizedBox(height: 12),
-              
               Text('🎯 智能特性', style: TextStyle(fontWeight: FontWeight.w600)),
               SizedBox(height: 4),
               Text('• 自动修复常见格式错误'),
@@ -621,13 +649,13 @@ class _EnhancedFeaturesFragmentState extends ConsumerState<EnhancedFeaturesFragm
 class PermissionStatusDialog extends StatelessWidget {
   final PermissionResult result;
   final Map<String, String> descriptions;
-  
+
   const PermissionStatusDialog({
     super.key,
     required this.result,
     required this.descriptions,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -649,7 +677,6 @@ class PermissionStatusDialog extends StatelessWidget {
             _buildPermissionItem('剪贴板', result.clipboard),
             _buildPermissionItem('网络访问', result.network),
             _buildPermissionItem('后台运行', result.background),
-            
             if (result.missingPermissions.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
@@ -660,7 +687,6 @@ class PermissionStatusDialog extends StatelessWidget {
                 ),
               ),
             ],
-            
             const SizedBox(height: 16),
             const Text(
               '权限说明:',
@@ -668,12 +694,12 @@ class PermissionStatusDialog extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             ...descriptions.entries.map((entry) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Text(
-                '• ${entry.key}: ${entry.value}',
-                style: const TextStyle(fontSize: 12),
-              ),
-            )),
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    '• ${entry.key}: ${entry.value}',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                )),
           ],
         ),
       ),
@@ -685,7 +711,7 @@ class PermissionStatusDialog extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildPermissionItem(String name, bool granted) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -750,9 +776,7 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
           ],
         ],
       ),
-      body: history.isEmpty
-          ? _buildEmptyState()
-          : _buildHistoryList(history),
+      body: history.isEmpty ? _buildEmptyState() : _buildHistoryList(history),
     );
   }
 
@@ -924,7 +948,7 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
       // 临时设置剪贴板内容并触发导入
       await Clipboard.setData(ClipboardData(text: content));
       await globalState.appController.addProfileFromClipboard();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('导入成功')),
@@ -943,7 +967,7 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
     try {
       final jsonData = ClipboardManager.instance.exportHistory();
       await Clipboard.setData(ClipboardData(text: jsonData));
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('历史记录已导出到剪贴板')),
@@ -962,7 +986,7 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
     try {
       final data = await Clipboard.getData('text/plain');
       final jsonData = data?.text;
-      
+
       if (jsonData == null || jsonData.isEmpty) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -971,9 +995,9 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
         }
         return;
       }
-      
+
       ClipboardManager.instance.importHistoryFromJson(jsonData);
-      
+
       if (mounted) {
         setState(() {}); // 刷新界面
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1019,4 +1043,4 @@ class _ImportHistoryPageState extends State<ImportHistoryPage> {
       ),
     );
   }
-} 
+}

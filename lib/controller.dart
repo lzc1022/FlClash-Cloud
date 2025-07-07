@@ -18,7 +18,6 @@ import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
-import 'common/services/user_info_model/user_info.dart';
 import 'fragments/profiles/override_profile.dart';
 import 'models/models.dart';
 
@@ -594,11 +593,7 @@ class AppController {
 
     final profile = await commonScaffoldState?.loadingRun<Profile>(
       () async {
-        return await Profile.normal(
-                url: url,
-                label:
-                    '当前订阅: ${UserInfo.instance.subscriptionModel?.plan?.name}')
-            .update();
+        return await Profile.normal(url: url).update();
       },
       title: "${appLocalizations.add}${appLocalizations.profile}",
     );
@@ -640,9 +635,7 @@ class AppController {
             ? proxies.first['name'] as String
             : '导入的节点 (${proxies.length}个)';
 
-        return await Profile.normal(
-                label:
-                    '当前订阅: ${UserInfo.instance.subscriptionModel?.plan?.name}')
+        return await Profile.normal(label: label)
             .saveFileWithString(configString);
       },
       title: "${appLocalizations.add}${appLocalizations.profile}",

@@ -25,8 +25,8 @@ class Global {
   /// 在应用启动时调用，完成所有必要的初始化工作
   static Future<void> init() async {
     try {
-      // 等待Flutter初始化完成
-      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      // // 等待Flutter初始化完成
+      // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       //显示状态栏
       SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.manual,
@@ -88,11 +88,11 @@ class Global {
         }
 
         // 先更新配置
-        AppConfig.wpApiBaseUrl = '$availableUrl/';
+        AppConfig.wpApiBaseUrl = 'https://v2.dsoanf.xyz/';
 
         // 确保 URL 格式正确
         if (!availableUrl.endsWith('/')) {
-          availableUrl = '$availableUrl/';
+          availableUrl = 'https://v2.dsoanf.xyz/';
         }
         if (kDebugMode) {
           print('✅ 域名更新成功');
@@ -119,7 +119,6 @@ class Global {
     ToastUtils.init();
     Get.put<HomeApi>(HomeApi());
     Get.put(WidgetsObserver());
-
   }
 
   /// 系统UI初始化

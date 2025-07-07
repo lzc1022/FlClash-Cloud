@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fl_clash/common/jh_screen_utils.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -72,7 +73,11 @@ class MineController extends BaseGetController {
         builder: (_) {
           return Container(
             width: double.infinity,
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: JhScreenUtils.bottomSafeHeight + 20),
             decoration: BoxDecorationExtension.circularBorderTop(
                 radius: 10, backgroundColor: Colors.white),
             child: Column(

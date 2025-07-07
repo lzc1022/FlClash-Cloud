@@ -281,7 +281,7 @@ class _WindowHeaderState extends State<WindowHeader> {
           ),
           if (Platform.isMacOS)
             const Text(
-              appName,
+              '红薯云',
             )
           else ...[
             const Positioned(
@@ -320,7 +320,7 @@ class AppIcon extends StatelessWidget {
             width: 8,
           ),
           Text(
-            appName,
+            '红薯云',
           ),
         ],
       ),

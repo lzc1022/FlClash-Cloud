@@ -4,6 +4,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../../../common/box.dart';
 import '../../../common/dio_http/toast_util.dart';
 import '../../../common/ex_decoration.dart';
+import '../../../common/jh_screen_utils.dart';
 import '../../../common/my/base_controller.dart';
 import '../../../models/order_model.dart';
 
@@ -38,7 +39,11 @@ class OrderListController extends BaseGetController {
         builder: (_) {
           return Container(
             width: double.infinity,
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: JhScreenUtils.bottomSafeHeight + 20),
             decoration: BoxDecorationExtension.circularBorderTop(
                 radius: 10, backgroundColor: Colors.white),
             child: Column(
