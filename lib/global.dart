@@ -88,11 +88,11 @@ class Global {
         }
 
         // 先更新配置
-        AppConfig.wpApiBaseUrl = 'https://v2.dsoanf.xyz/';
+        AppConfig.wpApiBaseUrl = '$availableUrl/';
 
         // 确保 URL 格式正确
         if (!availableUrl.endsWith('/')) {
-          availableUrl = 'https://v2.dsoanf.xyz/';
+          availableUrl = '$availableUrl/';
         }
         if (kDebugMode) {
           print('✅ 域名更新成功');
