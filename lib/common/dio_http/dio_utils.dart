@@ -139,6 +139,9 @@ void _onError(int? code, String msg, NetErrorCallback? onError) {
 Map<String, dynamic> _httpHeaders = {
   'Accept': 'application/json,*/*,charset=utf-8',
   'Content-Type': 'application/json',
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Expires': '0',
 };
 
 enum Method { get, post, put, patch, delete, head }

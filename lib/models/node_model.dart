@@ -78,7 +78,11 @@ class NodeParser {
     List<NodeSubModel> nodeList = [];
     try {
       var response = await dio.get(url,
-          options: Options(responseType: ResponseType.plain));
+          options: Options(responseType: ResponseType.plain, headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }));
       String subString2 = utf8.decode(base64Decode(response.data.trim()));
 
       if (subString2.isNotEmpty) {

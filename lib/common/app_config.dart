@@ -1,7 +1,7 @@
 /// 常量
 class AppConfig {
   static const String appApi =
-      'https://akk201.oss-ap-northeast-1.aliyuncs.com/do.json';
+      'https://akk201.oss-ap-northeast-1.aliyuncs.com/do1.json';
   //  服务器地址
   static String wpApiBaseUrl = 'https://vmpx.ffoky.xyz/'; // wp 服务器
   //配置
