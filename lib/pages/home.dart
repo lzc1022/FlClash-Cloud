@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:fl_clash/common/api/index.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../common/jh_sp_utils.dart';
 import '../common/services/index.dart';
 import '../models/suscription_model.dart';
 
@@ -66,7 +68,8 @@ class _HomePageView extends ConsumerStatefulWidget {
 
 class _HomePageViewState extends ConsumerState<_HomePageView> {
   late PageController _pageController;
-
+//订阅刷新通知
+  StreamSubscription? updateVipSubscription;
   @override
   void initState() {
     super.initState();
@@ -84,7 +87,16 @@ class _HomePageViewState extends ConsumerState<_HomePageView> {
         _updatePageController();
       }
     });
-
+    //退出登录通知
+    updateVipSubscription = eventListen<UpdateSubscribeEvent>((event) {
+      if (event.name == 'app_logout') {
+        ref.invalidate(profilesProvider);
+        UserInfo.instance.subscriptionModel = null;
+      }
+    });
+    if (JhSpUtils.getString('token') == null) {
+      return;
+    }
     loadData();
     getNotice();
   }

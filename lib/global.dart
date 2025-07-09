@@ -88,7 +88,7 @@ class Global {
         }
 
         // 先更新配置
-        AppConfig.wpApiBaseUrl = '$availableUrl/';
+        AppConfig.wpApiBaseUrl = availableUrl;
 
         // 确保 URL 格式正确
         if (!availableUrl.endsWith('/')) {

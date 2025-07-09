@@ -24,6 +24,8 @@ class MineController extends BaseGetController {
   String money = '余额0 佣金0';
   //订阅
   StreamSubscription? subscription;
+  // 添加定时器变量来跟踪延时任务
+  Timer? _getUserInfoTimer;
 
   @override
   void onReady() async {
@@ -38,19 +40,32 @@ class MineController extends BaseGetController {
 
   //获取用户信息
   getUserInfo() {
-    request.requestUserInfo(
-      success: (data) {
-        userInfoMessageModel = data;
-        money =
-            '余额${(userInfoMessageModel.data?.balance ?? 0) / 100.0} 佣金${(userInfoMessageModel.data?.commissionBalance.toDouble() ?? 0) / 100.0}';
-        update(["mine"]);
-        JhSpUtils.saveModel('userInfo', userInfoMessageModel);
-        ToastUtils.dismiss();
-      },
-      fail: (code, msg) {
-        ToastUtils.dismiss();
-      },
-    );
+    // 取消之前的定时器
+    _getUserInfoTimer?.cancel();
+
+    var resultData = JhSpUtils.getString('token');
+    if (resultData != null && resultData.isNotEmpty) {
+      //延时500ms加载
+      _getUserInfoTimer = Timer(Duration(milliseconds: 500), () {
+        // 再次检查token是否仍然存在（防止在延时期间token被清除）
+        var currentToken = JhSpUtils.getString('token');
+        if (currentToken != null && currentToken.isNotEmpty) {
+          request.requestUserInfo(
+            success: (data) {
+              userInfoMessageModel = data;
+              money =
+                  '余额${(userInfoMessageModel.data?.balance ?? 0) / 100.0} 佣金${(userInfoMessageModel.data?.commissionBalance.toDouble() ?? 0) / 100.0}';
+              update(["mine"]);
+              JhSpUtils.saveModel('userInfo', userInfoMessageModel);
+              ToastUtils.dismiss();
+            },
+            fail: (code, msg) {
+              ToastUtils.dismiss();
+            },
+          );
+        }
+      });
+    }
   }
 
   //购买会员
@@ -60,9 +75,13 @@ class MineController extends BaseGetController {
 
   //退出
   loginOut() {
+    // 立即取消用户信息获取的定时器
+    _getUserInfoTimer?.cancel();
+
     ToastUtils.toast('退出登录成功');
     JhSpUtils.remove('token');
     SpUtil.remove('token');
+    sendEvent(UpdateSubscribeEvent('app_logout'));
     Get.offAllNamed(RouteNames.systemLogin);
   }
 
@@ -129,5 +148,6 @@ class MineController extends BaseGetController {
   void onClose() {
     super.onClose();
     subscription?.cancel();
+    _getUserInfoTimer?.cancel();
   }
 }

@@ -138,7 +138,11 @@ class Profiles extends _$Profiles with AutoDisposeNotifierMixin {
     } else {
       profilesTemp[index] = updateProfile;
     }
-    state = profilesTemp;
+    state = [profile]; // 只保留一个;
+  }
+
+  clear() {
+    state = [];
   }
 
   updateProfile(String profileId, Profile Function(Profile profile) builder) {

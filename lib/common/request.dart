@@ -38,6 +38,11 @@ class Request {
       url,
       options: Options(
         responseType: ResponseType.bytes,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
       ),
     );
     return response;

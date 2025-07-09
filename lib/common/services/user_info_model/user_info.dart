@@ -1,6 +1,7 @@
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 
 import '../../../models/notice_model.dart';
+import '../../../models/profile.dart';
 import '../../../models/suscription_model.dart';
 import 'user_model.dart';
 
@@ -15,6 +16,7 @@ class UserInfo {
   UserInfo._internal();
   String? token;
   String? ip;
+  Profile? profile;
   List<NoticeModel> noticeList = [];
   SubscriptionModel? subscriptionModel;
   String noticeContent = '暂无公告';

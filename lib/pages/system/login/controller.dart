@@ -9,6 +9,8 @@ import '../../../common/jh_sp_utils.dart';
 import '../../../common/my/base_controller.dart';
 import '../../../common/routers/names.dart';
 import '../../../common/services/user_info_model/user_info.dart' show UserInfo;
+import '../../../enum/enum.dart';
+import '../../../state.dart';
 
 class LoginController extends BaseGetController {
   LoginController();
@@ -77,6 +79,7 @@ class LoginController extends BaseGetController {
           SpUtil.putString('userPwd', pwd);
 
           Future.delayed(const Duration(seconds: 1), () {
+            globalState.appController.toPage(PageLabel.dashboard);
             Get.offAllNamed(RouteNames.home);
           });
         }
