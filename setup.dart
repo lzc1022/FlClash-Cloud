@@ -131,8 +131,8 @@ class Build {
           archName: 'x86_64',
         ),
       ];
-
-  static String get appName => "FlClash";
+//修改名称
+  static String get appName => "hongshuyun";
 
   static String get coreName => "FlClashCore";
 
