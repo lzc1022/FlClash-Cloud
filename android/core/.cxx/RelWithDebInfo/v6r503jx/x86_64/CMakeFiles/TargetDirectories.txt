@@ -1,3 +1,0 @@
-/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/x86_64/CMakeFiles/core.dir
-/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/x86_64/CMakeFiles/edit_cache.dir
-/Users/ll/Desktop/FlClash-Cloud/android/core/.cxx/RelWithDebInfo/v6r503jx/x86_64/CMakeFiles/rebuild_cache.dir
