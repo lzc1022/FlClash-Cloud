@@ -7,6 +7,8 @@
 source ~/.bash_profile : 加载环境变量
 
 
+mac打包：dart run setup.dart macos --arch arm64 --env stable
+
 加 build 号 +1
 
 constant.dart:配置文件
