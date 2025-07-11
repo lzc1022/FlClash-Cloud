@@ -132,7 +132,7 @@ class Build {
         ),
       ];
 //修改名称
-  static String get appName => "hongshuyun";
+  static String get appName => "FlClash";
 
   static String get coreName => "FlClashCore";
 
